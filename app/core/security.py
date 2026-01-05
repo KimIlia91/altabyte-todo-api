@@ -1,4 +1,4 @@
-from fastapi import Depends
+from fastapi import Depends, FastAPI
 from fastapi.security import OAuth2AuthorizationCodeBearer
 import httpx
 from jose import jwt
@@ -10,20 +10,15 @@ from app.core.errors import Unauthorized
 from app.core.settings import settings
 
 oauth2_scheme = OAuth2AuthorizationCodeBearer(
-    authorizationUrl=settings.AUTHORIZE_URL,
-    tokenUrl=settings.TOKEN_URL,
+    authorizationUrl=settings.Auth.AUTHORIZE_URL,
+    tokenUrl=settings.Auth.TOKEN_URL,
     auto_error=False,
-    scopes={
-        "openid": "OpenID",
-        "profile": "Profile",
-        "email": "Email",
-    },
 )
 
 
 @lru_cache
 def get_jwks():
-    return httpx.get(settings.JWKS_URL).json()
+    return httpx.get(settings.Auth.JWKS_URL).json()
 
 
 def verify_token(token: str):
@@ -34,9 +29,9 @@ def verify_token(token: str):
         return jwt.decode(
             token,
             key,
-            algorithms=["RS256"],
-            audience=settings.OAUTH_CLIENT_ID,
-            issuer=settings.ISSUER,
+            algorithms=settings.Auth.AUTH_ALGORITHMS,
+            audience=settings.Auth.OAUTH_CLIENT_ID,
+            issuer=settings.Auth.ISSUER,
         )
     except Exception:
         raise Unauthorized("Invalid or expired token")
@@ -47,3 +42,11 @@ def get_current_user(token: Optional[str] = Depends(oauth2_scheme)) -> CurrentUs
         raise Unauthorized("Missing authentication token")
     payload = verify_token(token)
     return CurrentUser(**payload)
+
+
+def configure_swagger_ui_oauth(app: FastAPI) -> None:
+    """Настраивает OAuth конфигурацию для Swagger UI"""
+    app.swagger_ui_init_oauth = {
+        "clientId": settings.Auth.OAUTH_CLIENT_ID,
+        "usePkceWithAuthorizationCodeGrant": True,
+    }
