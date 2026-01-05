@@ -38,7 +38,7 @@ def verify_token(token: str):
         header = jwt.get_unverified_header(token)
         print(token)
         key = next(k for k in jwks["keys"] if k["kid"] == header["kid"])
-
+        print(key)
         return jwt.decode(
             token,
             key,
@@ -46,7 +46,8 @@ def verify_token(token: str):
             audience="todo-api",
             issuer=settings.ISSUER,
         )
-    except Exception:
+    except Exception as e:
+        print("Invalid or expired token", e)
         raise Unauthorized("Invalid or expired token")
 
 
@@ -61,5 +62,9 @@ def verify_token(token: str):
 
 
 def get_current_user(token: str = Depends(oauth2_scheme)) -> CurrentUser:
-    payload = verify_token(token)
-    return CurrentUser(**payload)
+    try:
+        payload = verify_token(token)
+        return CurrentUser(**payload)
+    except Exception as e:
+        print("Invalid or expired token", e)
+        raise Unauthorized("Invalid or expired token")
