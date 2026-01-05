@@ -43,7 +43,7 @@ def verify_token(token: str):
             token,
             key,
             algorithms=["RS256"],
-            audience="todo-api",
+            audience=settings.OAUTH_CLIENT_ID,
             issuer=settings.ISSUER,
         )
     except Exception as e:
@@ -62,9 +62,5 @@ def verify_token(token: str):
 
 
 def get_current_user(token: str = Depends(oauth2_scheme)) -> CurrentUser:
-    try:
-        payload = verify_token(token)
-        return CurrentUser(**payload)
-    except Exception as e:
-        print("Invalid or expired token", e)
-        raise Unauthorized("Invalid or expired token")
+    payload = verify_token(token)
+    return CurrentUser(**payload)
