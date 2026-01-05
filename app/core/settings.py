@@ -16,7 +16,7 @@ class Settings(BaseSettings):
     AUTHORIZE_URL: str = f"{AUTH_URL}/application/o/authorize/"
     TOKEN_URL: str = f"{AUTH_URL}/application/o/token/"
 
-    OAUTH_CLIENT_ID: str = "TN7twonQvj8KHNnfQkfqnrN7kxnuRGFUgGnFcuH9"
+    OAUTH_CLIENT_ID: str = "6VYHNJ8Cux0yz723FwNSIKd5WYgOAmkWz9mmZHhp"
 
     # class Config:
     #     env_file = ".env"
