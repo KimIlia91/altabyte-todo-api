@@ -1,10 +1,5 @@
 FROM python:3.14-slim
 
-ARG TODO_DB_URL
-ARG DEBUG=false
-
-ENV TODO_DB_URL=${TODO_DB_URL}
-
 WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
