@@ -1,5 +1,18 @@
-from typing import TypedDict, List
-from pydantic import BaseModel, Field
+from typing import TypedDict, List, Optional
+from pydantic import BaseModel, Field, ConfigDict
+
+
+class CurrentUser(BaseModel):
+    """Модель текущего пользователя из JWT токена"""
+
+    model_config = ConfigDict(extra="allow")
+
+    sub: str = Field(..., description="ID пользователя (subject)")
+    email: Optional[str] = Field(None, description="Email пользователя")
+    name: Optional[str] = Field(None, description="Имя пользователя")
+    preferred_username: Optional[str] = Field(
+        None, description="Предпочитаемое имя пользователя"
+    )
 
 
 class ValidationErrorItem(BaseModel):

@@ -3,6 +3,7 @@ from fastapi import APIRouter, status
 from app.core.schemas import ProblemDetails
 from .dependencies import TodoServiceDep
 from .schemas import TodoResponse, TodoCreateRequest, TodoUpdateRequest
+from .dependencies import CurrentUserDep
 
 
 class TodoController:
@@ -11,7 +12,10 @@ class TodoController:
     router = APIRouter(prefix="/todos", tags=["Todos"])
 
     @router.get("", response_model=List[TodoResponse], status_code=status.HTTP_200_OK)
-    def get_all_todos(todo_service: TodoServiceDep):
+    def get_all_todos(
+        todo_service: TodoServiceDep,
+        current_user: CurrentUserDep,
+    ):
         """Получает все задачи"""
 
         return todo_service.get_all()
@@ -22,13 +26,21 @@ class TodoController:
         status_code=status.HTTP_200_OK,
         responses={404: {"model": ProblemDetails}},
     )
-    def get_todo_by_id(todo_id: int, todo_service: TodoServiceDep):
+    def get_todo_by_id(
+        todo_id: int,
+        todo_service: TodoServiceDep,
+        current_user: CurrentUserDep,
+    ):
         """Получает задачу по ID"""
 
         return todo_service.get_by_id(todo_id)
 
     @router.post("", response_model=TodoResponse, status_code=status.HTTP_201_CREATED)
-    def create_todo(request: TodoCreateRequest, todo_service: TodoServiceDep):
+    def create_todo(
+        request: TodoCreateRequest,
+        todo_service: TodoServiceDep,
+        current_user: CurrentUserDep,
+    ):
         """Создает задачу"""
 
         return todo_service.create(request)
@@ -40,7 +52,10 @@ class TodoController:
         responses={404: {"model": ProblemDetails}},
     )
     def update_todo(
-        todo_id: int, request: TodoUpdateRequest, todo_service: TodoServiceDep
+        todo_id: int,
+        request: TodoUpdateRequest,
+        todo_service: TodoServiceDep,
+        current_user: CurrentUserDep,
     ):
         """Обновляет задачу"""
 
@@ -51,7 +66,11 @@ class TodoController:
         status_code=status.HTTP_204_NO_CONTENT,
         responses={404: {"model": ProblemDetails}},
     )
-    def delete_todo_by_id(todo_id: int, todo_service: TodoServiceDep):
+    def delete_todo_by_id(
+        todo_id: int,
+        todo_service: TodoServiceDep,
+        current_user: CurrentUserDep,
+    ):
         """Удаляет задачу по ID"""
 
         todo_service.delete(todo_id)

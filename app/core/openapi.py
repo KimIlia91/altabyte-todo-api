@@ -71,6 +71,28 @@ class CustomOpenAPI:
                             },
                         }
 
+                        if method.get("security"):
+                            responses["401"] = {
+                                "description": "Unauthorized",
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "$ref": "#/components/schemas/ProblemDetails"
+                                        }
+                                    },
+                                },
+                            }
+                            responses["403"] = {
+                                "description": "Forbidden",
+                                "content": {
+                                    "application/json": {
+                                        "schema": {
+                                            "$ref": "#/components/schemas/ProblemDetails"
+                                        }
+                                    },
+                                },
+                            }
+
             app.openapi_schema = schema
             return app.openapi_schema
 
