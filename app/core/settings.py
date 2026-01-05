@@ -9,13 +9,25 @@ class Settings(BaseSettings):
 
     TODO_DB_URL: str
 
-    AUTH_URL: str = "https://server-production-5c965.up.railway.app"
-    ISSUER: str = f"{AUTH_URL}/application/o/todo-api/"
-    JWKS_URL: str = f"{ISSUER}jwks/"
-    AUTHORIZE_URL: str = f"{AUTH_URL}/application/o/authorize/"
-    TOKEN_URL: str = f"{AUTH_URL}/application/o/token/"
-    OAUTH_CLIENT_ID: str = "6VYHNJ8Cux0yz723FwNSIKd5WYgOAmkWz9mmZHhp"
+    AUTH_URL: str
+    OAUTH_CLIENT_ID: str
     AUTH_ALGORITHMS: list[str] = ["RS256"]
+
+    @property
+    def ISSUER(self) -> str:
+        return f"{self.AUTH_URL}/application/o/todo-api/"
+
+    @property
+    def JWKS_URL(self) -> str:
+        return f"{self.ISSUER}jwks/"
+
+    @property
+    def AUTHORIZE_URL(self) -> str:
+        return f"{self.AUTH_URL}/application/o/authorize/"
+
+    @property
+    def TOKEN_URL(self) -> str:
+        return f"{self.AUTH_URL}/application/o/token/"
 
     model_config = ConfigDict(
         env_file=".env",
