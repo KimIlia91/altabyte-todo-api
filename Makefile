@@ -1,7 +1,6 @@
 .PHONY: help build up down logs run shell migrate migrate-create clean install
 
 COMPOSE = docker-compose
-SERVICE_API = api
 PYTHON = python
 VENV = venv
 
