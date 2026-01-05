@@ -1,5 +1,9 @@
 from fastapi import Depends
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi.security import (
+    HTTPBearer,
+    HTTPAuthorizationCredentials,
+    OAuth2AuthorizationCodeBearer,
+)
 import httpx
 from jose import jwt
 from typing import Optional
@@ -9,7 +13,18 @@ from app.core.schemas import CurrentUser
 from app.core.errors import Unauthorized
 from app.core.settings import settings
 
-security = HTTPBearer(auto_error=False)
+# security = HTTPBearer(auto_error=False)
+
+
+oauth2_scheme = OAuth2AuthorizationCodeBearer(
+    authorizationUrl=settings.AUTH_URL,
+    tokenUrl=settings.TOKEN_URL,
+    scopes={
+        "openid": "OpenID",
+        "profile": "Profile",
+        "email": "Email",
+    },
+)
 
 
 @lru_cache
@@ -35,11 +50,16 @@ def verify_token(token: str):
         raise Unauthorized("Invalid or expired token")
 
 
-def get_current_user(
-    credentials: Optional[HTTPAuthorizationCredentials] = Depends(security),
-) -> CurrentUser:
-    if not credentials:
-        raise Unauthorized("Missing authentication token")
+# def get_current_user(
+#     credentials: Optional[HTTPAuthorizationCredentials] = Depends(security),
+# ) -> CurrentUser:
+#     if not credentials:
+#         raise Unauthorized("Missing authentication token")
 
-    payload = verify_token(credentials.credentials)
+#     payload = verify_token(credentials.credentials)
+#     return CurrentUser(**payload)
+
+
+def get_current_user(token: str = Depends(oauth2_scheme)) -> CurrentUser:
+    payload = verify_token(token)
     return CurrentUser(**payload)

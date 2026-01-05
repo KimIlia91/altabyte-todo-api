@@ -3,15 +3,21 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    """Настройки приложения"""
-
     APP_NAME: str = "Todo List API"
     DEBUG: bool = False
+
     TODO_DB_URL: str = "postgresql://postgres:EjaycfIOrLDfwFiLEDmKYflCiBeshguh@postgres.railway.internal:5432/railway"
+
     AUTHENTIK_BASE: str = "https://server-production-5c965.up.railway.app"
     REALM: str = "application/o/todo-api"
+
     ISSUER: str = f"{AUTHENTIK_BASE}/{REALM}/"
-    JWKS_URL: str = f"{ISSUER}.well-known/jwks.json"
+    JWKS_URL: str = f"{ISSUER}jwks/"
+
+    AUTH_URL: str = f"{ISSUER}authorize/"
+    TOKEN_URL: str = f"{ISSUER}token/"
+
+    OAUTH_CLIENT_ID: str = "TN7twonQvj8KHNnfQkfqnrN7kxnuRGFUgGnFcuH9"
 
     # class Config:
     #     env_file = ".env"
