@@ -10,15 +10,15 @@ from app.core.errors import Unauthorized
 from app.core.settings import settings
 
 oauth2_scheme = OAuth2AuthorizationCodeBearer(
-    authorizationUrl=settings.Auth.AUTHORIZE_URL,
-    tokenUrl=settings.Auth.TOKEN_URL,
+    authorizationUrl=settings.AUTHORIZE_URL,
+    tokenUrl=settings.TOKEN_URL,
     auto_error=False,
 )
 
 
 @lru_cache
 def get_jwks():
-    return httpx.get(settings.Auth.JWKS_URL).json()
+    return httpx.get(settings.JWKS_URL).json()
 
 
 def verify_token(token: str):
@@ -29,9 +29,9 @@ def verify_token(token: str):
         return jwt.decode(
             token,
             key,
-            algorithms=settings.Auth.AUTH_ALGORITHMS,
-            audience=settings.Auth.OAUTH_CLIENT_ID,
-            issuer=settings.Auth.ISSUER,
+            algorithms=settings.AUTH_ALGORITHMS,
+            audience=settings.OAUTH_CLIENT_ID,
+            issuer=settings.ISSUER,
         )
     except Exception:
         raise Unauthorized("Invalid or expired token")
@@ -47,6 +47,6 @@ def get_current_user(token: Optional[str] = Depends(oauth2_scheme)) -> CurrentUs
 def configure_swagger_ui_oauth(app: FastAPI) -> None:
     """Настраивает OAuth конфигурацию для Swagger UI"""
     app.swagger_ui_init_oauth = {
-        "clientId": settings.Auth.OAUTH_CLIENT_ID,
+        "clientId": settings.OAUTH_CLIENT_ID,
         "usePkceWithAuthorizationCodeGrant": True,
     }

@@ -61,12 +61,28 @@ make install
 pip install -r requirements.txt
 ```
 
-### 5. Настройка базы данных
+### 5. Настройка переменных окружения
 
-Откройте файл `app/core/settings.py` и измените `TODO_DB_URL` на адрес вашей локальной базы данных:
+Создайте файл `.env` в корне проекта на основе `.env.example`:
 
-```python
-TODO_DB_URL: str = "postgresql://user:password@localhost:5432/todo_db"
+```bash
+cp .env.example .env
+```
+
+Откройте файл `.env` и настройте переменные окружения:
+
+```env
+# База данных
+TODO_DB_URL=postgresql://user:password@localhost:5432/todo_db
+
+# OAuth2/OpenID Connect
+AUTH_URL=https://server-production-5c965.up.railway.app
+```
+
+Пример для локальной разработки:
+```env
+TODO_DB_URL=postgresql://postgres:postgres@localhost:5432/todo_db
+AUTH_URL=https://server-production-5c965.up.railway.app
 ```
 
 ## Запуск приложения
@@ -191,7 +207,7 @@ web-api/
 
 1. Убедитесь, что PostgreSQL запущен и доступен
 2. Создайте базу данных: `CREATE DATABASE todo_db;`
-3. Настройте `TODO_DB_URL` в файле `app/core/settings.py`
+3. Создайте файл `.env` на основе `.env.example` и настройте `TODO_DB_URL`
 4. Примените миграции: `make update`
 5. Запустите сервер: `make run`
 
