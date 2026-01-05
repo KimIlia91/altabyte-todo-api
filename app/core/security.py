@@ -36,7 +36,7 @@ def verify_token(token: str):
     try:
         jwks = get_jwks()
         header = jwt.get_unverified_header(token)
-
+        print(token)
         key = next(k for k in jwks["keys"] if k["kid"] == header["kid"])
 
         return jwt.decode(
