@@ -8,14 +8,13 @@ class Settings(BaseSettings):
 
     TODO_DB_URL: str = "postgresql://postgres:EjaycfIOrLDfwFiLEDmKYflCiBeshguh@postgres.railway.internal:5432/railway"
 
-    AUTHENTIK_BASE: str = "https://server-production-5c965.up.railway.app"
-    REALM: str = "application/o/todo-api"
+    AUTH_URL: str = "https://server-production-5c965.up.railway.app"
 
-    ISSUER: str = f"{AUTHENTIK_BASE}/{REALM}/"
+    ISSUER: str = f"{AUTH_URL}/application/o/todo-api/"
     JWKS_URL: str = f"{ISSUER}jwks/"
 
-    AUTH_URL: str = f"{ISSUER}authorize/"
-    TOKEN_URL: str = f"{ISSUER}token/"
+    AUTHORIZE_URL: str = f"{AUTH_URL}/application/o/authorize/"
+    TOKEN_URL: str = f"{AUTH_URL}/application/o/token/"
 
     OAUTH_CLIENT_ID: str = "TN7twonQvj8KHNnfQkfqnrN7kxnuRGFUgGnFcuH9"
 
