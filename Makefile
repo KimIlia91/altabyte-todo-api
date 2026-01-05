@@ -12,6 +12,7 @@ help: ## Show help
 	@echo "  venv               Create venv"
 	@echo "  migrate            Create migration (usage: make migrate MESSAGE="your message")"
 	@echo "  update             Update migrations"
+	@echo "  downgrade          Downgrade migrations"
 	@echo "  build              Build Docker images"
 	@echo "  up                 Start containers"
 	@echo "  down               Stop containers"
@@ -35,6 +36,9 @@ migrate: ## Create migration (usage: make migrate MESSAGE="your message")
 
 update: ## Update migrations
 	$(ORM) upgrade head
+
+downgrade: ## Downgrade migrations
+	$(ORM) downgrade -1
 
 build: ## Build Docker images
 	$(COMPOSE) build
