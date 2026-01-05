@@ -17,7 +17,7 @@ from app.core.settings import settings
 
 
 oauth2_scheme = OAuth2AuthorizationCodeBearer(
-    authorizationUrl=settings.AUTH_URL,
+    authorizationUrl=settings.AUTHORIZE_URL,
     tokenUrl=settings.TOKEN_URL,
     scopes={
         "openid": "OpenID",
