@@ -17,7 +17,7 @@ help: ## Show help
 	@echo ""
 	@echo "For detailed information use: make <command>"
 
-venv:
+venv: ## Create venv
 	$(PYTHON) -m venv $(VENV)
 
 install: ## Install dependencies
