@@ -60,11 +60,6 @@ def verify_token(token: str):
 #     return CurrentUser(**payload)
 
 
-def get_current_user(
-    credentials: Optional[HTTPAuthorizationCredentials] = Depends(oauth2_scheme),
-) -> CurrentUser:
-    if not credentials:
-        raise Unauthorized("Missing authentication token")
-
-    payload = verify_token(credentials.credentials)
+def get_current_user(token: str = Depends(oauth2_scheme)) -> CurrentUser:
+    payload = verify_token(token)
     return CurrentUser(**payload)
