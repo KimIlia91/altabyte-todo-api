@@ -1,9 +1,9 @@
-from functools import lru_cache
-from typing import Dict, Optional
 from fastapi import Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-from jose import jwt
 import httpx
+from jose import jwt
+from typing import Optional
+from functools import lru_cache
 
 from app.core.schemas import CurrentUser
 from app.core.errors import Unauthorized
@@ -17,11 +17,16 @@ def get_jwks():
     return httpx.get(settings.JWKS_URL).json()
 
 
-def verify_token(token: str) -> Dict:
+def verify_token(token: str):
     try:
+        jwks = get_jwks()
+        header = jwt.get_unverified_header(token)
+
+        key = next(k for k in jwks["keys"] if k["kid"] == header["kid"])
+
         return jwt.decode(
             token,
-            get_jwks(),
+            key,
             algorithms=["RS256"],
             audience="todo-api",
             issuer=settings.ISSUER,
@@ -33,9 +38,8 @@ def verify_token(token: str) -> Dict:
 def get_current_user(
     credentials: Optional[HTTPAuthorizationCredentials] = Depends(security),
 ) -> CurrentUser:
-    """Получает текущего пользователя из JWT токена"""
-    if credentials is None:
+    if not credentials:
         raise Unauthorized("Missing authentication token")
 
-    token_data = verify_token(credentials.credentials)
-    return CurrentUser(**token_data)
+    payload = verify_token(credentials.credentials)
+    return CurrentUser(**payload)
