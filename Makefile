@@ -8,6 +8,7 @@ help: ## Show help
 	@echo "Available commands:"
 	@echo ""
 	@echo "  install            Create venv and install dependencies"
+	@echo "  venv               Create venv"
 	@echo "  build              Build Docker images"
 	@echo "  up                 Start containers"
 	@echo "  down               Stop containers"
