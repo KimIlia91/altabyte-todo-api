@@ -6,8 +6,12 @@ class Settings(BaseSettings):
     APP_NAME: str = "Todo List API"
     DEBUG: bool = False
 
+    # TODO_DB_URL: str = (
+    #     "postgresql://postgres:EjaycfIOrLDfwFiLEDmKYflCiBeshguh@postgres.railway.internal:5432/railway"
+    # )
+
     TODO_DB_URL: str = (
-        "postgresql://postgres:EjaycfIOrLDfwFiLEDmKYflCiBeshguh@postgres.railway.internal:5432/railway"
+        "postgresql://postgres:EjaycfIOrLDfwFiLEDmKYflCiBeshguh@switchyard.proxy.rlwy.net:32235/railway"
     )
 
     class Auth:

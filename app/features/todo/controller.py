@@ -18,7 +18,7 @@ class TodoController:
     ):
         """Получает все задачи"""
 
-        return todo_service.get_all()
+        return todo_service.get_all(current_user.sub)
 
     @router.get(
         "/{todo_id}",
@@ -32,8 +32,8 @@ class TodoController:
         current_user: CurrentUserDep,
     ):
         """Получает задачу по ID"""
-
-        return todo_service.get_by_id(todo_id)
+        
+        return todo_service.get_by_id(todo_id, current_user.sub)
 
     @router.post("", response_model=TodoResponse, status_code=status.HTTP_201_CREATED)
     def create_todo(
@@ -43,7 +43,7 @@ class TodoController:
     ):
         """Создает задачу"""
 
-        return todo_service.create(request)
+        return todo_service.create(request, current_user.sub)
 
     @router.put(
         "/{todo_id}",
@@ -59,7 +59,7 @@ class TodoController:
     ):
         """Обновляет задачу"""
 
-        return todo_service.update(todo_id, request)
+        return todo_service.update(todo_id, request, current_user.sub)
 
     @router.delete(
         "/{todo_id}",
@@ -73,4 +73,4 @@ class TodoController:
     ):
         """Удаляет задачу по ID"""
 
-        todo_service.delete(todo_id)
+        todo_service.delete(todo_id, current_user.sub)

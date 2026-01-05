@@ -11,6 +11,7 @@ class TodoResponse(BaseModel):
     description: str | None
     completed: bool
     priority: TodoPriority
+    owner_id: str
     created_at: datetime
     updated_at: datetime | None
 
