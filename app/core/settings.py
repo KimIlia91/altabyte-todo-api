@@ -1,18 +1,16 @@
 from pathlib import Path
 from pydantic_settings import BaseSettings
 
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
-
 
 class Settings(BaseSettings):
     """Настройки приложения"""
 
     APP_NAME: str = "Todo List API"
     DEBUG: bool = False
-    TODO_DB_URL: str
+    TODO_DB_URL: str = "postgresql://postgres:EjaycfIOrLDfwFiLEDmKYflCiBeshguh@postgres.railway.internal:5432/railway"
 
     class Config:
-        env_file = BASE_DIR / ".env"
+        env_file = ".env"
         case_sensitive = True
         env_file_encoding = "utf-8"
         extra = "ignore"
