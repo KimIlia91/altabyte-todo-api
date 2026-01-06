@@ -1,10 +1,12 @@
 from fastapi import FastAPI
+
 from .core.handlers import ExceptionHandlers
 from .core.openapi import CustomOpenAPI
 from .features.todo.controller import TodoController
-from .core.security import configure_swagger_ui_oauth
+from .core.auth.security import configure_swagger_ui_oauth
+from .core.lifespan import app_lifespan
 
-app = FastAPI()
+app = FastAPI(lifespan=app_lifespan)
 
 configure_swagger_ui_oauth(app)
 CustomOpenAPI.register(app)
