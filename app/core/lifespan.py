@@ -2,6 +2,7 @@ from contextlib import AsyncExitStack, asynccontextmanager
 from fastapi import FastAPI
 
 from app.core.auth.client import AuthClient
+from app.core.databases import close_db_engine
 
 
 @asynccontextmanager
@@ -15,3 +16,4 @@ async def app_lifespan(app: FastAPI):
     async with AsyncExitStack() as stack:
         await stack.enter_async_context(AuthClient.lifespan(app))
         yield
+        await close_db_engine()

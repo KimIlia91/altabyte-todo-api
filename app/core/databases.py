@@ -23,7 +23,9 @@ async def get_todo_db() -> AsyncSession:
     """Dependency для получения сессии Todo БД"""
 
     async with AsyncSessionTodoDbLocal() as db:
-        try:
-            yield db
-        finally:
-            await db.close()
+        yield db
+
+
+async def close_db_engine():
+    """Закрыть database engine и все соединения из пула"""
+    await todo_db_engine.dispose()
